@@ -1,0 +1,6 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://112.168.122.174:3306/health_service?serverTimezone=UTC&characterEncoding=UTF-8
+    username: anstjaos
+    password: root
