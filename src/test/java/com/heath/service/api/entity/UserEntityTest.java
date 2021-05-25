@@ -1,16 +1,15 @@
-package com.heath.service.api.user.entity;
+package com.heath.service.api.entity;
 
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.heath.service.api.DbUnitTestContext;
-import com.heath.service.api.entity.UserEntity;
 import org.junit.Test;
 
 import java.time.LocalDateTime;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @DatabaseSetup(value = {
-        "/database/user/user.xml"
+        "/database/user.xml"
 })
 public class UserEntityTest extends DbUnitTestContext {
 

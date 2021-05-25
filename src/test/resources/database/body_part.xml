@@ -1,0 +1,5 @@
+<dataset>
+    <Body_Part body_part_id="1" body_part_name="Shoulder" />
+    <Body_Part body_part_id="2" body_part_name="Chest" />
+    <Body_Part body_part_id="3" body_part_name="Back" />
+</dataset>

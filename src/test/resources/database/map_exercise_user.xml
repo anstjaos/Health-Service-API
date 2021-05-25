@@ -1,0 +1,4 @@
+<dataset>
+    <Map_Exercise_User map_id="1" exercise_id="1" user_id="1" date="2021-05-25 12:30:00" exercise_count="10" set_count="3" />
+    <Map_Exercise_User map_id="2" exercise_id="2" user_id="1" date="2021-05-25 12:40:00" exercise_count="12" set_count="3" />
+</dataset>
