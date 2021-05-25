@@ -1,0 +1,4 @@
+<dataset>
+    <Exercise exercise_id="1" name="deadlift" exercise_type_id="1" body_part_id="2" />
+    <Exercise exercise_id="2" name="squat" exercise_type_id="3" body_part_id="3" />
+</dataset>
