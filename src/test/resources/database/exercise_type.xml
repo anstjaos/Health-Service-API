@@ -1,0 +1,6 @@
+<dataset>
+    <Exercise_Type type_id="1" type_name="push" />
+    <Exercise_Type type_id="2" type_name="pull" />
+    <Exercise_Type type_id="3" type_name="lower" />
+    <Exercise_Type type_id="4" type_name="cardio" />
+</dataset>
