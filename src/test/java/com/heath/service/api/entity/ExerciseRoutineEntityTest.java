@@ -16,10 +16,10 @@ public class ExerciseRoutineEntityTest extends DbUnitTestContext {
     public void success_get_set_routine() {
         ExerciseRoutineEntity exerciseRoutineEntity = new ExerciseRoutineEntity();
 
-        exerciseRoutineEntity.setUserId(1);
+        exerciseRoutineEntity.setUserNum(1);
         exerciseRoutineEntity.setDayOfWeek(0);
 
-        assertEquals(1, exerciseRoutineEntity.getUserId());
+        assertEquals(1, exerciseRoutineEntity.getUserNum());
         assertEquals(0, exerciseRoutineEntity.getDayOfWeek());
     }
 }

@@ -18,11 +18,13 @@ public class UserEntityTest extends DbUnitTestContext {
         UserEntity user = new UserEntity();
 
         LocalDateTime curTime = LocalDateTime.now();
+        user.setUserId("test");
         user.setNickName("hi");
         user.setCreatedOn(curTime);
         user.setModifiedOn(curTime);
         user.setEmail("test@naver.com");
 
+        assertEquals("test", user.getUserId());
         assertEquals("hi", user.getNickName());
         assertEquals(curTime, user.getCreatedOn());
         assertEquals(curTime, user.getModifiedOn());

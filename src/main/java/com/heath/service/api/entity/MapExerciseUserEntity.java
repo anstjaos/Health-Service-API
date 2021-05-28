@@ -20,8 +20,8 @@ public class MapExerciseUserEntity {
     @Column(name = "exercise_id")
     private Integer exerciseId;
 
-    @Column(name = "user_id")
-    private Integer userId;
+    @Column(name = "user_num")
+    private Integer userNum;
 
     @Column(name = "date")
     private LocalDateTime date;

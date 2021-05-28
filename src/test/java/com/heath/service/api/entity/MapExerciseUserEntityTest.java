@@ -22,13 +22,13 @@ public class MapExerciseUserEntityTest extends DbUnitTestContext {
         LocalDateTime date = LocalDateTime.now();
 
         mapExerciseUserEntity.setExerciseId(1);
-        mapExerciseUserEntity.setUserId(1);
+        mapExerciseUserEntity.setUserNum(1);
         mapExerciseUserEntity.setDate(date);
         mapExerciseUserEntity.setExerciseCount(10);
         mapExerciseUserEntity.setSetCount(3);
 
         assertEquals(1, mapExerciseUserEntity.getExerciseId());
-        assertEquals(1, mapExerciseUserEntity.getUserId());
+        assertEquals(1, mapExerciseUserEntity.getUserNum());
         assertEquals(date, mapExerciseUserEntity.getDate());
         assertEquals(10, mapExerciseUserEntity.getExerciseCount());
         assertEquals(3, mapExerciseUserEntity.getSetCount());

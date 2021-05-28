@@ -16,8 +16,11 @@ public class ExerciseRoutineEntity {
     @Column(name = "routine_id")
     private Integer routineId;
 
-    @Column(name = "user_id")
-    private Integer userId;
+    @Column(name = "user_num")
+    private Integer userNum;
+
+    @Column(name = "routine_name")
+    private String routineName;
 
     @Column(name = "day_of_week")
     private Integer dayOfWeek;

@@ -13,8 +13,11 @@ import java.time.LocalDateTime;
 public class UserEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name= "user_id")
-    private Integer userId;
+    @Column(name= "user_num")
+    private Integer userNum;
+
+    @Column(name = "user_id")
+    private String userId;
 
     @Column(name = "nickname")
     private String nickName;
