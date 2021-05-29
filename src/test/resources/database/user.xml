@@ -1,7 +1,7 @@
 <dataset>
-    <User user_id="1" nickname="test" password="test" created_on="2021-05-20 21:16:33" modified_on="2021-05-20 21:16:33" email="test@naver.com" />
-    <User user_id="2" nickname="test2" password="test" created_on="2021-05-21 21:16:33" modified_on="2021-05-21 21:16:33" email="test1@naver.com" />
-    <User user_id="3" nickname="test3" password="test" created_on="2021-05-20 21:16:33" modified_on="2021-05-20 21:16:33" email="test2@naver.com" />
-    <User user_id="4" nickname="test4" password="test" created_on="2021-05-20 21:16:33" modified_on="2021-05-20 21:16:33" email="test3@naver.com" />
-    <User user_id="5" nickname="test5" password="test" created_on="2021-05-23 21:16:33" modified_on="2021-05-23 21:16:33" email="test4@naver.com" />
+    <User user_num="1" user_id="test@naver.com" nickname="test" password="test" created_on="2021-05-20 21:16:33" modified_on="2021-05-20 21:16:33" email="test@naver.com" />
+    <User user_num="2" user_id="test2@naver.com" nickname="test2" password="test" created_on="2021-05-21 21:16:33" modified_on="2021-05-21 21:16:33" email="test1@naver.com" />
+    <User user_num="3" user_id="test3@naver.com" nickname="test3" password="test" created_on="2021-05-20 21:16:33" modified_on="2021-05-20 21:16:33" email="test2@naver.com" />
+    <User user_num="4" user_id="test4@naver.com" nickname="test4" password="test" created_on="2021-05-20 21:16:33" modified_on="2021-05-20 21:16:33" email="test3@naver.com" />
+    <User user_num="5" user_id="test5@naver.com" nickname="test5" password="test" created_on="2021-05-23 21:16:33" modified_on="2021-05-23 21:16:33" email="test4@naver.com" />
 </dataset>
