@@ -30,6 +30,6 @@ public class UserServiceTest extends DbUnitTestContext {
         Integer userNum = userService.createUser(request);
 
         // then
-        assertEquals(6, userNum);
+        assertEquals(1, userNum);
     }
 }

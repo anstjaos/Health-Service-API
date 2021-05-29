@@ -1,5 +1,6 @@
 package com.health.service.api.user.entity;
 
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -14,6 +15,7 @@ public class UserEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name= "user_num")
+    @Setter(AccessLevel.NONE)
     private Integer userNum;
 
     @Column(name = "user_id")
