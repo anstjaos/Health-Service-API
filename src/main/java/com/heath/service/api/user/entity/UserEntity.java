@@ -1,4 +1,4 @@
-package com.heath.service.api.entity;
+package com.heath.service.api.user.entity;
 
 import lombok.Getter;
 import lombok.Setter;

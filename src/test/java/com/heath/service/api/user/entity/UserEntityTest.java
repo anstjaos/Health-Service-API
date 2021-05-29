@@ -1,7 +1,8 @@
-package com.heath.service.api.entity;
+package com.heath.service.api.user.entity;
 
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.heath.service.api.DbUnitTestContext;
+import com.heath.service.api.user.entity.UserEntity;
 import org.junit.Test;
 
 import java.time.LocalDateTime;

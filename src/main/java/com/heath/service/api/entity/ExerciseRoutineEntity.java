@@ -1,5 +1,6 @@
 package com.heath.service.api.entity;
 
+import com.heath.service.api.user.entity.UserEntity;
 import lombok.Getter;
 import lombok.Setter;
 
