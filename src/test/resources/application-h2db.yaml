@@ -2,14 +2,13 @@ spring:
   datasource:
     url: jdbc:h2:mem:test;MODE=MySQL;INIT=RUNSCRIPT FROM 'classpath:ddl.sql';
     username: sa
-    password:
+    password: pw
     driver-class-name: org.h2.Driver
     type: org.apache.commons.dbcp2.BasicDataSource
     dbcp2:
       max-total: 3
       initial-size: 1
       validation-query: select 1
-
   jpa:
     hibernate:
       ddl-auto: none
