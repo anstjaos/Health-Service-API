@@ -2,6 +2,7 @@ package com.health.service.api.common.model;
 
 import lombok.Builder;
 import lombok.Getter;
+import org.springframework.http.HttpStatus;
 
 @Getter
 public class APIResponseHeader {
@@ -26,5 +27,9 @@ public class APIResponseHeader {
                 .statusCode(statusCode)
                 .message(message)
                 .build();
+    }
+
+    public static APIResponseHeader success() {
+        return APIResponseHeader.create(true, HttpStatus.OK.value(), "success");
     }
 }

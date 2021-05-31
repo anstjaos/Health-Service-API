@@ -7,7 +7,7 @@ import org.junit.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @DatabaseSetup(value = {
-        "/database/user.xml",
+        "/database/service_user.xml",
         "/database/exercise_routine.xml"
 })
 public class ExerciseRoutineEntityTest extends DbUnitTestContext {

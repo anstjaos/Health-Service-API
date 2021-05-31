@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @DatabaseSetup(value = {
-        "/database/user.xml"
+        "/database/service_user.xml"
 })
 public class UserEntityTest extends DbUnitTestContext {
 

@@ -1,0 +1,7 @@
+package com.health.service.api.common.exception;
+
+import com.health.service.api.common.model.command.ResultCode;
+
+public class UserNotFoundException extends HealthServiceException {
+    public UserNotFoundException() { super("not found user", ResultCode.NOT_FOUND); }
+}

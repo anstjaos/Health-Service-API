@@ -10,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @DatabaseSetup(value = {
         "/database/exercise.xml",
-        "/database/user.xml",
+        "/database/service_user.xml",
         "/database/map_exercise_user.xml"
 })
 public class MapExerciseUserEntityTest extends DbUnitTestContext {

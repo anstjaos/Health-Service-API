@@ -3,13 +3,14 @@ package com.health.service.api.user.service;
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.health.service.api.DbUnitTestContext;
 import com.health.service.api.user.command.request.UserCreateRequest;
+import com.health.service.api.user.command.request.UserUpdateRequest;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@DatabaseSetup(value = {
-        "/database/user.xml"
+@DatabaseSetup({
+        "classpath:database/service_user.xml"
 })
 public class UserServiceTest extends DbUnitTestContext {
 
@@ -30,6 +31,21 @@ public class UserServiceTest extends DbUnitTestContext {
         Integer userNum = userService.createUser(request);
 
         // then
-        assertEquals(1, userNum);
+        assertEquals(6, userNum);
+    }
+
+    @Test
+    public void success_update_user() {
+        // given
+        UserUpdateRequest request = new UserUpdateRequest();
+
+        request.setNickname("test");
+        request.setPassword("asdf");
+        request.setEmail("asdf");
+
+        // when
+        userService.updateUser(1, request);
+
+        // then
     }
 }
