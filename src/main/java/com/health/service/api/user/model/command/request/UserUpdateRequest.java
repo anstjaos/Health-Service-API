@@ -1,4 +1,4 @@
-package com.health.service.api.user.command.request;
+package com.health.service.api.user.model.command.request;
 
 import lombok.Getter;
 import lombok.Setter;

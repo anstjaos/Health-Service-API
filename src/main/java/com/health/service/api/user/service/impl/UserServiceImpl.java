@@ -1,14 +1,17 @@
 package com.health.service.api.user.service.impl;
 
 import com.health.service.api.common.exception.UserNotFoundException;
-import com.health.service.api.user.command.request.UserCreateRequest;
-import com.health.service.api.user.command.request.UserUpdateRequest;
+import com.health.service.api.user.model.command.request.UserCreateRequest;
+import com.health.service.api.user.model.command.request.UserUpdateRequest;
 import com.health.service.api.user.entity.UserEntity;
+import com.health.service.api.user.model.dto.UserDto;
+import com.health.service.api.user.model.dto.mapper.UserDtoMapper;
 import com.health.service.api.user.repository.UserRepository;
 import com.health.service.api.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
@@ -23,6 +26,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public Integer createUser(UserCreateRequest userCreateRequest) {
         UserEntity userEntity = new UserEntity();
 
@@ -37,6 +41,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public void updateUser(Integer userNum, UserUpdateRequest userUpdateRequest) {
         UserEntity user = userRepository.findById(userNum)
                 .orElseThrow(UserNotFoundException::new);
@@ -51,5 +56,22 @@ public class UserServiceImpl implements UserService {
                 .ifPresent(user::setNickName);
 
         user.setModifiedOn(LocalDateTime.now());
+    }
+
+    @Override
+    @Transactional
+    public void deleteUser(Integer userNum) {
+        UserEntity user = userRepository.findById(userNum)
+                .orElseThrow(UserNotFoundException::new);
+
+        userRepository.delete(user);
+    }
+
+    @Override
+    public UserDto getUser(Integer userNum) {
+        UserEntity userEntity = userRepository.findById(userNum)
+                .orElseThrow(UserNotFoundException::new);
+
+        return UserDtoMapper.convert(userEntity);
     }
 }
