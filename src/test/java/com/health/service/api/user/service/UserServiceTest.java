@@ -66,4 +66,23 @@ public class UserServiceTest extends DbUnitTestContext {
         // when
         userService.updateUser(30, request);
     }
+
+    @Test
+    public void success_get_user() {
+        // given
+        Integer userNum = 1;
+        // when
+        UserDto user = userService.getUser(userNum);
+        // then
+        assertEquals("test@naver.com", user.getUserId());
+        assertEquals("test", user.getNickName());
+        assertEquals("test@naver.com", user.getEmail());
+    }
+
+    @Test(expected = UserNotFoundException.class)
+    public void fail_get_user() {
+        Integer userNum = 1111;
+
+        UserDto user = userService.getUser(userNum);
+    }
 }
