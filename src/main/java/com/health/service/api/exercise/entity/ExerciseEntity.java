@@ -1,4 +1,4 @@
-package com.health.service.api.entity;
+package com.health.service.api.exercise.entity;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -26,8 +26,10 @@ public class ExerciseEntity {
     private Integer bodyPartId;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "exercise_type_id")
     private ExerciseTypeEntity exerciseType;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "body_part_id")
     private BodyPartEntity bodyPart;
 }
