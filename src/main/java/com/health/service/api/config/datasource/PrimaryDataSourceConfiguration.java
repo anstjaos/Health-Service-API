@@ -27,7 +27,8 @@ import java.util.Map;
 @EnableTransactionManagement
 @EnableJpaRepositories(
         basePackages = {
-                "com.health.service.api.user"
+                "com.health.service.api.user",
+                "com.health.service.api.exercise"
         },
         entityManagerFactoryRef = "primaryEntityManager",
         transactionManagerRef = "primaryTransactionManager")
@@ -75,7 +76,8 @@ public class PrimaryDataSourceConfiguration {
                 .determineHibernateProperties(jpaProperties.getProperties(), new HibernateSettings().ddlAuto(() -> "none")));
 
         String[] packageToScan = {
-                "com.health.service.api.user.entity"
+                "com.health.service.api.user.entity",
+                "com.health.service.api.exercise.entity"
         };
 
         LocalContainerEntityManagerFactoryBean entityManagerFactoryBean = new LocalContainerEntityManagerFactoryBean();
