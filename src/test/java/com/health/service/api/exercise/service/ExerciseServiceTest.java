@@ -61,4 +61,24 @@ public class ExerciseServiceTest extends DbUnitTestContext {
         exerciseService.updateExercise(10, request);
         // then
     }
+
+    @Test
+    public void success_get_exercise() {
+        // given
+        // when
+        ExerciseDto result = exerciseService.getExercise(1);
+        // then
+        assertEquals(1, result.getExerciseId());
+        assertEquals("deadlift", result.getExerciseName());
+        assertEquals(1, result.getExerciseTypeId());
+        assertEquals(2, result.getBodyPartId());
+    }
+
+    @Test(expected = ExerciseNotFoundException.class)
+    public void fail_get_exercise() {
+        // given
+        // when
+        exerciseService.getExercise(14);
+        // then
+    }
 }

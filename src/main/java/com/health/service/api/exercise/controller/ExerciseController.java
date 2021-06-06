@@ -3,6 +3,7 @@ package com.health.service.api.exercise.controller;
 import com.health.service.api.common.model.APIResponse;
 import com.health.service.api.common.model.APIResponseHeader;
 import com.health.service.api.common.model.SingleResponse;
+import com.health.service.api.exercise.model.command.model.ExerciseDto;
 import com.health.service.api.exercise.model.command.request.ExerciseCreateRequest;
 import com.health.service.api.exercise.model.command.request.ExerciseUpdateRequest;
 import com.health.service.api.exercise.service.ExerciseService;
@@ -31,5 +32,11 @@ public class ExerciseController {
                                       @RequestBody ExerciseUpdateRequest request) {
         exerciseService.updateExercise(exerciseId, request);
         return new APIResponse(APIResponseHeader.success(), new SingleResponse<>(null));
+    }
+
+    @GetMapping("/{exerciseId}")
+    public APIResponse getExercise(@PathVariable("exerciseId") Integer exerciseId) {
+        ExerciseDto response = exerciseService.getExercise(exerciseId);
+        return new APIResponse(APIResponseHeader.success(), new SingleResponse<>(response));
     }
 }

@@ -5,6 +5,7 @@ import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.health.service.api.DbUnitTestContext;
 import com.health.service.api.common.exception.ExerciseNotFoundException;
 import com.health.service.api.common.exception.UserNotFoundException;
+import com.health.service.api.exercise.model.command.model.ExerciseDto;
 import com.health.service.api.exercise.model.command.request.ExerciseCreateRequest;
 import com.health.service.api.exercise.model.command.request.ExerciseUpdateRequest;
 import com.health.service.api.exercise.service.ExerciseService;
@@ -21,6 +22,7 @@ import java.time.format.TextStyle;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
 @AutoConfigureMockMvc
@@ -80,6 +82,34 @@ public  class ExerciseControllerTest extends DbUnitTestContext {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectToString(request)))
                 .andExpect(MockMvcResultMatchers.status().isOk());
+    }
+
+    @Test
+    public void fail_get_exercise() throws Exception {
+        // given
+        // when
+        doThrow(new ExerciseNotFoundException()).when(exerciseService).getExercise(any());
+        // then
+        mockMvc.perform(MockMvcRequestBuilders.get("/exercises/7"))
+                .andDo(print())
+                .andExpect(MockMvcResultMatchers.content().string("{\"header\":{\"statusCode\":404,\"message\":\"not found exercise\",\"successful\":false},\"body\":null}"));
+    }
+
+    @Test
+    public void success_get_exercise() throws Exception {
+        // given
+        ExerciseDto exerciseDto = ExerciseDto.builder()
+                .exerciseId(1)
+                .exerciseName("test")
+                .exerciseTypeId(1)
+                .bodyPartId(1)
+                .build();
+        // when
+        when(exerciseService.getExercise(1)).thenReturn(exerciseDto);
+        // then
+        mockMvc.perform(MockMvcRequestBuilders.get("/exercises/1"))
+                .andDo(print())
+                .andExpect(MockMvcResultMatchers.content().string("{\"header\":{\"statusCode\":200,\"message\":\"success\",\"successful\":true},\"body\":{\"content\":{\"exerciseId\":1,\"exerciseName\":\"test\",\"exerciseTypeId\":1,\"bodyPartId\":1}}}"));
     }
 
     private static String objectToString(final Object obj) {
