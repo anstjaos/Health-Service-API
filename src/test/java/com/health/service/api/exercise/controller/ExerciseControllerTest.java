@@ -112,6 +112,27 @@ public  class ExerciseControllerTest extends DbUnitTestContext {
                 .andExpect(MockMvcResultMatchers.content().string("{\"header\":{\"statusCode\":200,\"message\":\"success\",\"successful\":true},\"body\":{\"content\":{\"exerciseId\":1,\"exerciseName\":\"test\",\"exerciseTypeId\":1,\"bodyPartId\":1}}}"));
     }
 
+    @Test
+    public void fail_delete_exercise() throws Exception {
+        // given
+        // when
+        doThrow(new ExerciseNotFoundException()).when(exerciseService).deleteExercise(any());
+        // then
+        mockMvc.perform(MockMvcRequestBuilders.delete("/exercises/7"))
+                .andDo(print())
+                .andExpect(MockMvcResultMatchers.content().string("{\"header\":{\"statusCode\":404,\"message\":\"not found exercise\",\"successful\":false},\"body\":null}"));
+    }
+
+    @Test
+    public void success_delete_exercise() throws Exception {
+        // given
+        // when
+        // then
+        mockMvc.perform(MockMvcRequestBuilders.delete("/exercises/1"))
+                .andDo(print())
+                .andExpect(MockMvcResultMatchers.status().isOk());
+    }
+
     private static String objectToString(final Object obj) {
         try {
             return new ObjectMapper().writeValueAsString(obj);

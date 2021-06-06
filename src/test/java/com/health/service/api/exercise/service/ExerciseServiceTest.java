@@ -81,4 +81,21 @@ public class ExerciseServiceTest extends DbUnitTestContext {
         exerciseService.getExercise(14);
         // then
     }
+
+    @Test(expected = ExerciseNotFoundException.class)
+    public void success_delete_exercise() {
+        // given
+        // when
+        exerciseService.deleteExercise(1);
+        // then
+        exerciseService.getExercise(1);
+    }
+
+    @Test(expected = ExerciseNotFoundException.class)
+    public void fail_delete_exercise() {
+        // given
+        // when
+        exerciseService.deleteExercise(36);
+        // then
+    }
 }

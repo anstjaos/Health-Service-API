@@ -63,4 +63,13 @@ public class ExerciseServiceImpl implements ExerciseService {
                 .bodyPartId(exerciseEntity.getBodyPartId())
                 .build();
     }
+
+    @Override
+    @Transactional
+    public void deleteExercise(Integer exerciseId) {
+        ExerciseEntity exerciseEntity = exerciseRepository.findById(exerciseId)
+                .orElseThrow(ExerciseNotFoundException::new);
+
+        exerciseRepository.delete(exerciseEntity);
+    }
 }

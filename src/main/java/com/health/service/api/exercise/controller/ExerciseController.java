@@ -39,4 +39,10 @@ public class ExerciseController {
         ExerciseDto response = exerciseService.getExercise(exerciseId);
         return new APIResponse(APIResponseHeader.success(), new SingleResponse<>(response));
     }
+
+    @DeleteMapping("/{exerciseId}")
+    public APIResponse deleteExercise(@PathVariable("exerciseId") Integer exerciseId) {
+        exerciseService.deleteExercise(exerciseId);
+        return new APIResponse(APIResponseHeader.success(), new SingleResponse<>(null));
+    }
 }

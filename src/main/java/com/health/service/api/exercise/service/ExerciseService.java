@@ -11,4 +11,6 @@ public interface ExerciseService {
     void updateExercise(Integer exerciseId, ExerciseUpdateRequest request);
 
     ExerciseDto getExercise(Integer exerciseId);
+
+    void deleteExercise(Integer exerciseId);
 }
