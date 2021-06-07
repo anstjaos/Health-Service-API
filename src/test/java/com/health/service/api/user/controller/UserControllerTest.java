@@ -47,7 +47,7 @@ public class UserControllerTest extends DbUnitTestContext {
         request.setPassword("test");
         request.setEmail("test@asdf.com");
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/users")
+        mockMvc.perform(MockMvcRequestBuilders.post("/users/sign-in")
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(objectToString(request)))
                 .andExpect(MockMvcResultMatchers.status().isOk());

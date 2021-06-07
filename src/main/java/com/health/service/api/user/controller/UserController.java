@@ -20,7 +20,7 @@ public class UserController {
         this.userService = userService;
     }
 
-    @PostMapping
+    @PostMapping("/sign-in")
     public APIResponse createUser(@RequestBody UserCreateRequest userCreateRequest) {
         Integer userNum = userService.createUser(userCreateRequest);
         return new APIResponse(APIResponseHeader.success(), new SingleResponse<>(userNum));
@@ -38,4 +38,6 @@ public class UserController {
         userService.deleteUser(userNum);
         return new APIResponse(APIResponseHeader.success(), new SingleResponse<>(null));
     }
+
+
 }

@@ -13,16 +13,14 @@ import javax.servlet.http.HttpServletResponse;
 
 public class JwtAuthInterceptor implements HandlerInterceptor {
 
-    private final JwtUtil jwtUtil;
-    private final UserRepository userRepository;
+    @Autowired
+    private JwtUtil jwtUtil;
+
+    @Autowired
+    private UserRepository userRepository;
 
     private final String HEADER_TOKEN_KEY = "token";
 
-    @Autowired
-    public JwtAuthInterceptor(JwtUtil jwtUtil, UserRepository userRepository) {
-        this.jwtUtil = jwtUtil;
-        this.userRepository = userRepository;
-    }
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
