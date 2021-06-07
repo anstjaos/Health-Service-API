@@ -1,7 +1,7 @@
 package com.health.service.api.config.interceptor;
 
 import com.health.service.api.common.exception.TokenNotMatchException;
-import com.health.service.api.common.exception.UserNotFoundException;
+import com.health.service.api.user.exception.UserNotFoundException;
 import com.health.service.api.common.util.JwtUtil;
 import com.health.service.api.user.entity.UserEntity;
 import com.health.service.api.user.repository.UserRepository;

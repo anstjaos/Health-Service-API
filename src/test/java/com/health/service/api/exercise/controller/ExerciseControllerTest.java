@@ -3,8 +3,7 @@ package com.health.service.api.exercise.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.health.service.api.DbUnitTestContext;
-import com.health.service.api.common.exception.ExerciseNotFoundException;
-import com.health.service.api.common.exception.UserNotFoundException;
+import com.health.service.api.exercise.exception.ExerciseNotFoundException;
 import com.health.service.api.exercise.model.command.model.ExerciseDto;
 import com.health.service.api.exercise.model.command.request.ExerciseCreateRequest;
 import com.health.service.api.exercise.model.command.request.ExerciseUpdateRequest;
@@ -17,8 +16,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-
-import java.time.format.TextStyle;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doThrow;

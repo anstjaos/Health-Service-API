@@ -4,6 +4,7 @@ import com.health.service.api.common.model.APIResponse;
 import com.health.service.api.common.model.APIResponseHeader;
 import com.health.service.api.common.model.SingleResponse;
 import com.health.service.api.user.model.command.request.UserCreateRequest;
+import com.health.service.api.user.model.command.request.UserLoginRequest;
 import com.health.service.api.user.model.command.request.UserUpdateRequest;
 import com.health.service.api.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,5 +40,9 @@ public class UserController {
         return new APIResponse(APIResponseHeader.success(), new SingleResponse<>(null));
     }
 
-
+    @PostMapping("/login")
+    public APIResponse loginUser(@RequestBody UserLoginRequest request) {
+        String token = userService.loginUser(request);
+        return new APIResponse(APIResponseHeader.success(), new SingleResponse<>(token));
+    }
 }

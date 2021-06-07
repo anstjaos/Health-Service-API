@@ -1,7 +1,9 @@
 package com.health.service.api.user.service.impl;
 
-import com.health.service.api.common.exception.UserNotFoundException;
+import com.health.service.api.user.exception.UserLoginFailException;
+import com.health.service.api.user.exception.UserNotFoundException;
 import com.health.service.api.user.model.command.request.UserCreateRequest;
+import com.health.service.api.user.model.command.request.UserLoginRequest;
 import com.health.service.api.user.model.command.request.UserUpdateRequest;
 import com.health.service.api.user.entity.UserEntity;
 import com.health.service.api.user.model.dto.UserDto;
@@ -73,5 +75,17 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(UserNotFoundException::new);
 
         return UserDtoMapper.convert(userEntity);
+    }
+
+    @Override
+    public String loginUser(UserLoginRequest request) {
+        UserEntity userEntity = userRepository.findByUserId(request.getUserId())
+                .orElseThrow(UserNotFoundException::new);
+
+        if (!userEntity.getPassword().equals(request.getPassword())) {
+            throw new UserLoginFailException();
+        }
+
+        return userEntity.getToken();
     }
 }

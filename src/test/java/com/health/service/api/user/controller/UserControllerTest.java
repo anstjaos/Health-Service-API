@@ -3,8 +3,10 @@ package com.health.service.api.user.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.health.service.api.DbUnitTestContext;
-import com.health.service.api.common.exception.UserNotFoundException;
+import com.health.service.api.user.exception.UserLoginFailException;
+import com.health.service.api.user.exception.UserNotFoundException;
 import com.health.service.api.user.model.command.request.UserCreateRequest;
+import com.health.service.api.user.model.command.request.UserLoginRequest;
 import com.health.service.api.user.model.command.request.UserUpdateRequest;
 import com.health.service.api.user.service.UserService;
 import org.junit.Test;
@@ -20,8 +22,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
 @RunWith(SpringRunner.class)
@@ -88,6 +89,54 @@ public class UserControllerTest extends DbUnitTestContext {
                     .content(objectToString(request)))
                 .andDo(print())
                 .andExpect(MockMvcResultMatchers.content().string("{\"header\":{\"statusCode\":404,\"message\":\"not found user\",\"successful\":false},\"body\":null}"));
+    }
+
+    @Test
+    public void success_login_user() throws Exception {
+        // given
+        UserLoginRequest request = new UserLoginRequest();
+        request.setUserId("test@naver.com");
+        request.setPassword("test");
+        // when
+        when(userService.loginUser(request)).thenReturn("1234");
+        // then
+        mockMvc.perform(MockMvcRequestBuilders.post("/users/login")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectToString(request)))
+                .andDo(print())
+                .andExpect(MockMvcResultMatchers.status().isOk());
+    }
+    
+    @Test
+    public void fail_login_user_not_found() throws Exception {
+        // given
+        UserLoginRequest request = new UserLoginRequest();
+        request.setUserId("asdf@naver.com");
+        request.setPassword("asedf");
+        // when
+        doThrow(new UserNotFoundException()).when(userService).loginUser(any());
+        // then
+        mockMvc.perform(MockMvcRequestBuilders.post("/users/login")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectToString(request)))
+                .andDo(print())
+                .andExpect(MockMvcResultMatchers.content().string("{\"header\":{\"statusCode\":404,\"message\":\"not found user\",\"successful\":false},\"body\":null}"));
+    }
+
+    @Test
+    public void fail_login_user_not_valid() throws Exception{
+        // given
+        UserLoginRequest request = new UserLoginRequest();
+        request.setUserId("asdf@naver.com");
+        request.setPassword("asedf");
+        // when
+        doThrow(new UserLoginFailException()).when(userService).loginUser(any());
+        // then
+        mockMvc.perform(MockMvcRequestBuilders.post("/users/login")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectToString(request)))
+                .andDo(print())
+                .andExpect(MockMvcResultMatchers.content().string("{\"header\":{\"statusCode\":403,\"message\":\"login info is not valid\",\"successful\":false},\"body\":null}"));
     }
 
     private static String objectToString(final Object obj) {
