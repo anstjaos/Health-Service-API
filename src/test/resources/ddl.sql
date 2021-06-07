@@ -6,7 +6,8 @@ create table if not exists Service_User
     password        varchar(256),
     created_on      datetime,
     modified_on     datetime,
-    email           varchar(40)
+    email           varchar(40),
+    token           varchar(256)
 );
 
 create table if not exists Body_Part
