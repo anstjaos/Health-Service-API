@@ -3,28 +3,34 @@ package com.health.service.api.exercise.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.health.service.api.DbUnitTestContext;
+import com.health.service.api.config.WebConfig;
+import com.health.service.api.config.interceptor.JwtAuthInterceptor;
 import com.health.service.api.exercise.exception.ExerciseNotFoundException;
 import com.health.service.api.exercise.model.command.model.ExerciseDto;
 import com.health.service.api.exercise.model.command.request.ExerciseCreateRequest;
 import com.health.service.api.exercise.model.command.request.ExerciseUpdateRequest;
 import com.health.service.api.exercise.service.ExerciseService;
 import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
 @AutoConfigureMockMvc
 @DatabaseSetup(value = {
-        "/database/exercise.xml"
+        "/database/exercise.xml",
+        "/database/service_user.xml"
 })
 public  class ExerciseControllerTest extends DbUnitTestContext {
 
@@ -35,14 +41,26 @@ public  class ExerciseControllerTest extends DbUnitTestContext {
     @MockBean
     private ExerciseService exerciseService;
 
+    @MockBean
+    JwtAuthInterceptor interceptor;
+
+    @BeforeEach
+    public void initTest() throws Exception {
+        when(interceptor.preHandle(any(), any(), any())).thenReturn(true);
+    }
+
     @Test
     public void success_create_exercise() throws Exception {
+        // given
         ExerciseCreateRequest request = new ExerciseCreateRequest();
         request.setExerciseName("test");
         request.setBodyPardId(1);
         request.setExerciseTypeId(1);
-
+        //when
+        // then
         mockMvc.perform(MockMvcRequestBuilders.post("/exercises")
+                .accept(MediaType.APPLICATION_JSON)
+                .header("userNum", 1)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectToString(request)))
                 .andExpect(MockMvcResultMatchers.status().isOk());

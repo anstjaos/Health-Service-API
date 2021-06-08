@@ -6,11 +6,13 @@ import com.health.service.api.common.util.JwtUtil;
 import com.health.service.api.user.entity.UserEntity;
 import com.health.service.api.user.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+@Component
 public class JwtAuthInterceptor implements HandlerInterceptor {
 
     @Autowired
@@ -21,10 +23,9 @@ public class JwtAuthInterceptor implements HandlerInterceptor {
 
     private final String HEADER_TOKEN_KEY = "token";
 
-
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        UserEntity user = userRepository.findById(Integer.parseInt(request.getHeader("userId")))
+        UserEntity user = userRepository.findById(Integer.parseInt(request.getHeader("userNum")))
                 .orElseThrow(UserNotFoundException::new);
 
         String givenToken = request.getHeader(HEADER_TOKEN_KEY);

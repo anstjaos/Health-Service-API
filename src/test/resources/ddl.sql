@@ -34,6 +34,7 @@ create table if not exists Exercise_Routine
 (
     routine_id      int auto_increment primary key,
     user_num        int,
+    routine_name    varchar(45),
     day_of_week     int
 );
 
