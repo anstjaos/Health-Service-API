@@ -1,6 +1,6 @@
 package com.health.service.api.exercise.service.impl;
 
-import com.health.service.api.common.exception.ExerciseNotFoundException;
+import com.health.service.api.exercise.exception.ExerciseNotFoundException;
 import com.health.service.api.exercise.entity.ExerciseEntity;
 import com.health.service.api.exercise.model.command.model.ExerciseDto;
 import com.health.service.api.exercise.model.command.request.ExerciseCreateRequest;

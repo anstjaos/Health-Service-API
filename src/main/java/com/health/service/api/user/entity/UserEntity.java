@@ -35,4 +35,7 @@ public class UserEntity {
 
     @Column(name = "email")
     private String email;
+
+    @Column(name = "token")
+    private String token;
 }

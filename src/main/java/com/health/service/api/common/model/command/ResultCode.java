@@ -6,6 +6,7 @@ import lombok.Getter;
 public enum ResultCode {
     SUCCESS(200, true, "success"),
     BAD_REQUEST(400, false, "bad request"),
+    ACCESS_DENIED(403, false, "access denied"),
     NOT_FOUND(404, false, "not found");
 
     private Integer code;
