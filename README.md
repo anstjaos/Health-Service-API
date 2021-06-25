@@ -37,7 +37,7 @@ POST /users
 {
   "userId": "test@naver.com",
   "nickname": "test",
-  "password": "asdf...", // encoded SHA-256
+  "password": "asdf...", # encoded SHA-256
   "email": "test@naver.com"
 }
 ```
@@ -133,7 +133,7 @@ POST /auth/login
 ```json
 {
 	"userId": "test@naver.com",
-	"password": "asdfasdf" // encoded SHA-256
+	"password": "asdfasdf" # encoded SHA-256
 }
 ```
 
