@@ -2,6 +2,7 @@ package com.health.service.api.entity;
 
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.health.service.api.DbUnitTestContext;
+import com.health.service.api.routine.entity.ExerciseRoutineEntity;
 import org.junit.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

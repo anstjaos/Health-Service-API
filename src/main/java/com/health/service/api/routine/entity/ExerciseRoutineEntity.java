@@ -1,4 +1,4 @@
-package com.health.service.api.entity;
+package com.health.service.api.routine.entity;
 
 import com.health.service.api.user.entity.UserEntity;
 import lombok.Getter;
@@ -27,5 +27,6 @@ public class ExerciseRoutineEntity {
     private Integer dayOfWeek;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_num", updatable = false, insertable = false)
     private UserEntity user;
 }
