@@ -1,8 +1,11 @@
 package com.health.service.api.routine.service.impl;
 
 import com.health.service.api.routine.entity.ExerciseRoutineEntity;
-import com.health.service.api.routine.exception.CreateRoutineRequestException;
+import com.health.service.api.routine.exception.RoutineRequestException;
+import com.health.service.api.routine.exception.RoutineNotFoundException;
+import com.health.service.api.routine.model.command.model.RoutineDto;
 import com.health.service.api.routine.model.command.request.CreateRoutineRequest;
+import com.health.service.api.routine.model.command.request.UpdateRoutineRequest;
 import com.health.service.api.routine.repository.RoutineRepository;
 import com.health.service.api.routine.service.RoutineService;
 import com.health.service.api.user.service.UserService;
@@ -45,11 +48,44 @@ public class RoutineServiceImpl implements RoutineService {
 
     private void checkCreateRoutineRequest(CreateRoutineRequest request) {
         Optional.ofNullable(request.getRoutineName())
-                .orElseThrow(() -> new CreateRoutineRequestException("routine name must be not null!"));
+                .orElseThrow(() -> new RoutineRequestException("routine name must be not null!"));
 
         Optional.ofNullable(request.getDayOfWeek())
-                .orElseThrow(() -> new CreateRoutineRequestException("routine day of week must be not null!"));
+                .orElseThrow(() -> new RoutineRequestException("routine day of week must be not null!"));
 
-        if (request.getDayOfWeek() < 0 || request.getDayOfWeek() > 6) throw new CreateRoutineRequestException("routine day of week value must set between 0, 6");
+        if (request.getDayOfWeek() < 0 || request.getDayOfWeek() > 6) throw new RoutineRequestException("routine day of week value must set between 0, 6");
+    }
+
+    @Override
+    @Transactional
+    public void updateRoutine(Integer userNum, Integer routineId, UpdateRoutineRequest request) {
+        userService.getUser(userNum);
+
+        ExerciseRoutineEntity exerciseRoutineEntity = routineRepository.findById(routineId)
+                .orElseThrow(RoutineNotFoundException::new);
+
+        Optional.ofNullable(request.getRoutineName())
+                .ifPresent(exerciseRoutineEntity::setRoutineName);
+
+        Optional.ofNullable(request.getDayOfWeek())
+                .ifPresent(dayOfWeek -> {
+                    if (request.getDayOfWeek() < 0 || request.getDayOfWeek() > 6)
+                        throw new RoutineRequestException("routine day of week value must set between 0, 6");
+
+                    exerciseRoutineEntity.setDayOfWeek(dayOfWeek);
+                });
+    }
+
+    @Override
+    public RoutineDto getRoutine(Integer routineId) {
+        ExerciseRoutineEntity routineEntity = routineRepository.findById(routineId)
+                .orElseThrow(RoutineNotFoundException::new);
+
+        return RoutineDto.builder()
+                .routineId(routineEntity.getRoutineId())
+                .userNum(routineEntity.getUserNum())
+                .routineName(routineEntity.getRoutineName())
+                .dayOfWeek(routineEntity.getDayOfWeek())
+                .build();
     }
 }

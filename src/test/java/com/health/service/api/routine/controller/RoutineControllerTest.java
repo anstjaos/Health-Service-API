@@ -3,8 +3,10 @@ package com.health.service.api.routine.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.health.service.api.DbUnitTestContext;
-import com.health.service.api.routine.exception.CreateRoutineRequestException;
+import com.health.service.api.routine.exception.RoutineRequestException;
+import com.health.service.api.routine.exception.RoutineNotFoundException;
 import com.health.service.api.routine.model.command.request.CreateRoutineRequest;
+import com.health.service.api.routine.model.command.request.UpdateRoutineRequest;
 import com.health.service.api.routine.service.RoutineService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -27,7 +29,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @DatabaseSetup(value = {
-        "/database/exercise_routine.xml"
+        "/database/exercise_routine.xml",
+        "/database/service_user.xml"
 })
 public class RoutineControllerTest extends DbUnitTestContext {
 
@@ -58,7 +61,7 @@ public class RoutineControllerTest extends DbUnitTestContext {
         CreateRoutineRequest request = new CreateRoutineRequest();
         request.setDayOfWeek(4);
         // when
-        doThrow(new CreateRoutineRequestException("routine name must be not null!")).when(routineService).createRoutine(any(), any());
+        doThrow(new RoutineRequestException("routine name must be not null!")).when(routineService).createRoutine(any(), any());
         // then
         mockMvc.perform(MockMvcRequestBuilders.post("/users/1/routines")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -73,7 +76,7 @@ public class RoutineControllerTest extends DbUnitTestContext {
         CreateRoutineRequest request = new CreateRoutineRequest();
         request.setDayOfWeek(8);
         // when
-        doThrow(new CreateRoutineRequestException("routine day of week value must set between 0, 6")).when(routineService).createRoutine(any(), any());
+        doThrow(new RoutineRequestException("routine day of week value must set between 0, 6")).when(routineService).createRoutine(any(), any());
         // then
         mockMvc.perform(MockMvcRequestBuilders.post("/users/1/routines")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -82,6 +85,50 @@ public class RoutineControllerTest extends DbUnitTestContext {
                 .andExpect(MockMvcResultMatchers.content().string("{\"header\":{\"statusCode\":400,\"message\":\"routine day of week value must set between 0, 6\",\"successful\":false},\"body\":null}"));
     }
 
+    @Test
+    public void success_update_routine() throws Exception {
+        // given
+        UpdateRoutineRequest request = new UpdateRoutineRequest();
+        request.setRoutineName("asdf");
+        request.setDayOfWeek(2);
+        // when
+        // then
+        mockMvc.perform(MockMvcRequestBuilders.put("/users/1/routines/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectToString(request)))
+                .andExpect(MockMvcResultMatchers.status().isOk());
+    }
+
+    @Test
+    public void fail_update_routine() throws Exception {
+        // given
+        UpdateRoutineRequest request = new UpdateRoutineRequest();
+        request.setRoutineName("asdf");
+        request.setDayOfWeek(2);
+        // when
+        doThrow(new RoutineNotFoundException()).when(routineService).updateRoutine(any(), any(), any());
+        // then
+        mockMvc.perform(MockMvcRequestBuilders.put("/users/10/routines/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectToString(request)))
+                .andExpect(MockMvcResultMatchers.content().string("{\"header\":{\"statusCode\":404,\"message\":\"routine not found!\",\"successful\":false},\"body\":null}"));
+    }
+
+    @Test
+    public void fail_update_routine_dayOfWeek() throws Exception {
+        // given
+        UpdateRoutineRequest request = new UpdateRoutineRequest();
+        request.setRoutineName("asdf");
+        request.setDayOfWeek(10);
+        // when
+        doThrow(new RoutineRequestException("routine day of week value must set between 0, 6")).when(routineService).updateRoutine(any(), any(), any());
+        // then
+        mockMvc.perform(MockMvcRequestBuilders.put("/users/10/routines/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectToString(request)))
+                .andExpect(MockMvcResultMatchers.content().string("{\"header\":{\"statusCode\":400,\"message\":\"routine day of week value must set between 0, 6\",\"successful\":false},\"body\":null}"));
+    }
+    
     private static String objectToString(final Object obj) {
         try {
             return new ObjectMapper().writeValueAsString(obj);
