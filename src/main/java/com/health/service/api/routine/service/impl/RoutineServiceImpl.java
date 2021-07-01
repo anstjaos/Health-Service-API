@@ -5,6 +5,7 @@ import com.health.service.api.routine.exception.RoutineNotMatchedException;
 import com.health.service.api.routine.exception.RoutineRequestException;
 import com.health.service.api.routine.exception.RoutineNotFoundException;
 import com.health.service.api.routine.model.command.model.RoutineDto;
+import com.health.service.api.routine.model.command.model.mapper.RoutineDtoMapper;
 import com.health.service.api.routine.model.command.request.CreateRoutineRequest;
 import com.health.service.api.routine.model.command.request.UpdateRoutineRequest;
 import com.health.service.api.routine.repository.RoutineRepository;
@@ -14,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -105,5 +107,14 @@ public class RoutineServiceImpl implements RoutineService {
         }
 
         routineRepository.delete(routineEntity);
+    }
+
+    @Override
+    public List<RoutineDto> getRoutineList(Integer userNum) {
+        userService.getUser(userNum);
+
+        List<ExerciseRoutineEntity> routineEntityList = routineRepository.findAllByUserNum(userNum);
+
+        return RoutineDtoMapper.convert(routineEntityList);
     }
 }

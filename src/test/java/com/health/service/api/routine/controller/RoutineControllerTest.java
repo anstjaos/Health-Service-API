@@ -207,6 +207,29 @@ public class RoutineControllerTest extends DbUnitTestContext {
                 .andExpect(MockMvcResultMatchers.content().string("{\"header\":{\"statusCode\":404,\"message\":\"routine not found!\",\"successful\":false},\"body\":null}"));
     }
 
+    @Test
+    public void success_get_routine_list() throws Exception {
+        // given
+        Integer userNum = 1;
+        // when
+        // then
+        mockMvc.perform(MockMvcRequestBuilders.get("/users/" + userNum + "/routines")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isOk());
+    }
+
+    @Test
+    public void fail_get_routine_list_userNotFound() throws Exception {
+        // given
+        Integer userNum = 1;
+        // when
+        doThrow(new UserNotFoundException()).when(routineService).getRoutineList(any());
+        // then
+        mockMvc.perform(MockMvcRequestBuilders.get("/users/" + userNum + "/routines")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.content().string("{\"header\":{\"statusCode\":404,\"message\":\"not found user\",\"successful\":false},\"body\":null}"));
+    }
+
     private static String objectToString(final Object obj) {
         try {
             return new ObjectMapper().writeValueAsString(obj);

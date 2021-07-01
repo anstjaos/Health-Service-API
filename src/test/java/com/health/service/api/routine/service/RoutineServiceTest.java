@@ -12,6 +12,8 @@ import com.health.service.api.user.exception.UserNotFoundException;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @DatabaseSetup(value = {
@@ -196,6 +198,35 @@ public class RoutineServiceTest extends DbUnitTestContext {
         Integer routineId = 1;
         // when
         routineService.deleteRoutine(userNum, routineId);
+        // then
+    }
+
+    @Test
+    public void success_get_routine_list() {
+        // given
+        Integer userNum = 1;
+        // when
+        List<RoutineDto> routineList = routineService.getRoutineList(userNum);
+        // then
+        assertEquals(3, routineList.size());
+    }
+    
+    @Test
+    public void success_get_routine_list_empty() {
+        // given
+        Integer userNum = 2;
+        // when
+        List<RoutineDto> routineList = routineService.getRoutineList(userNum);
+        // then
+        assertEquals(0, routineList.size());
+    }
+
+    @Test(expected = UserNotFoundException.class)
+    public void fail_get_routine_list_userNotFound() {
+        // given
+        Integer userNum = 1234;
+        // when
+        routineService.getRoutineList(userNum);
         // then
     }
 }
