@@ -28,7 +28,8 @@ import java.util.Map;
 @EnableJpaRepositories(
         basePackages = {
                 "com.health.service.api.user",
-                "com.health.service.api.exercise"
+                "com.health.service.api.exercise",
+                "com.health.service.api.routine"
         },
         entityManagerFactoryRef = "primaryEntityManager",
         transactionManagerRef = "primaryTransactionManager")
@@ -77,7 +78,8 @@ public class PrimaryDataSourceConfiguration {
 
         String[] packageToScan = {
                 "com.health.service.api.user.entity",
-                "com.health.service.api.exercise.entity"
+                "com.health.service.api.exercise.entity",
+                "com.health.service.api.routine.entity"
         };
 
         LocalContainerEntityManagerFactoryBean entityManagerFactoryBean = new LocalContainerEntityManagerFactoryBean();
