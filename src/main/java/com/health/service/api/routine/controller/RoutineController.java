@@ -42,4 +42,11 @@ public class RoutineController {
         RoutineDto routineDto = routineService.getRoutine(userNum, routineId);
         return new APIResponse(APIResponseHeader.success(), new SingleResponse<>(routineDto));
     }
+
+    @DeleteMapping("/routines/{routineId}")
+    public APIResponse deleteRoutine(@PathVariable("userNum") Integer userNum,
+                                     @PathVariable("routineId") Integer routineId) {
+        routineService.deleteRoutine(userNum, routineId);
+        return new APIResponse(APIResponseHeader.success(), new SingleResponse<>(null));
+    }
 }

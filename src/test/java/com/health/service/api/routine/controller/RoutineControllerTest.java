@@ -3,11 +3,13 @@ package com.health.service.api.routine.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.health.service.api.DbUnitTestContext;
+import com.health.service.api.routine.exception.RoutineNotMatchedException;
 import com.health.service.api.routine.exception.RoutineRequestException;
 import com.health.service.api.routine.exception.RoutineNotFoundException;
 import com.health.service.api.routine.model.command.request.CreateRoutineRequest;
 import com.health.service.api.routine.model.command.request.UpdateRoutineRequest;
 import com.health.service.api.routine.service.RoutineService;
+import com.health.service.api.user.exception.UserNotFoundException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -150,6 +152,57 @@ public class RoutineControllerTest extends DbUnitTestContext {
         doThrow(new RoutineNotFoundException()).when(routineService).getRoutine(any(), any());
         // then
         mockMvc.perform(MockMvcRequestBuilders.get("/users/" + userNum + "/routines/" + routineId)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.content().string("{\"header\":{\"statusCode\":404,\"message\":\"routine not found!\",\"successful\":false},\"body\":null}"));
+    }
+
+    @Test
+    public void success_delete_routine() throws Exception {
+        // given
+        Integer userNum = 1;
+        Integer routineId = 1;
+        // when
+        // then
+        mockMvc.perform(MockMvcRequestBuilders.delete("/users/" + userNum + "/routines/" + routineId)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isOk());
+    }
+
+    @Test
+    public void fail_delete_routine_notFoundUser() throws Exception {
+        // given
+        Integer userNum = 145;
+        Integer routineId = 1;
+        // when
+        doThrow(new UserNotFoundException()).when(routineService).deleteRoutine(any(), any());
+        // then
+        mockMvc.perform(MockMvcRequestBuilders.delete("/users/" + userNum + "/routines/" + routineId)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.content().string("{\"header\":{\"statusCode\":404,\"message\":\"not found user\",\"successful\":false},\"body\":null}"));
+    }
+
+    @Test
+    public void fail_delete_routine_routineNotMatched() throws Exception {
+        // given
+        Integer userNum = 2;
+        Integer routineId = 1;
+        // when
+        doThrow(new RoutineNotMatchedException()).when(routineService).deleteRoutine(any(), any());
+        // then
+        mockMvc.perform(MockMvcRequestBuilders.delete("/users/" + userNum + "/routines/" + routineId)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.content().string("{\"header\":{\"statusCode\":400,\"message\":\"user num is not matched this routine\",\"successful\":false},\"body\":null}"));
+    }
+
+    @Test
+    public void fail_delete_routine_routineNotFound() throws Exception {
+        // given
+        Integer userNum = 1;
+        Integer routineId = 177;
+        // when
+        doThrow(new RoutineNotFoundException()).when(routineService).deleteRoutine(any(), any());
+        // then
+        mockMvc.perform(MockMvcRequestBuilders.delete("/users/" + userNum + "/routines/" + routineId)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.content().string("{\"header\":{\"statusCode\":404,\"message\":\"routine not found!\",\"successful\":false},\"body\":null}"));
     }

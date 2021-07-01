@@ -1,6 +1,7 @@
 package com.health.service.api.routine.service.impl;
 
 import com.health.service.api.routine.entity.ExerciseRoutineEntity;
+import com.health.service.api.routine.exception.RoutineNotMatchedException;
 import com.health.service.api.routine.exception.RoutineRequestException;
 import com.health.service.api.routine.exception.RoutineNotFoundException;
 import com.health.service.api.routine.model.command.model.RoutineDto;
@@ -79,7 +80,7 @@ public class RoutineServiceImpl implements RoutineService {
     @Override
     public RoutineDto getRoutine(Integer userNum, Integer routineId) {
         userService.getUser(userNum);
-        
+
         ExerciseRoutineEntity routineEntity = routineRepository.findById(routineId)
                 .orElseThrow(RoutineNotFoundException::new);
 
@@ -89,5 +90,20 @@ public class RoutineServiceImpl implements RoutineService {
                 .routineName(routineEntity.getRoutineName())
                 .dayOfWeek(routineEntity.getDayOfWeek())
                 .build();
+    }
+
+    @Override
+    @Transactional
+    public void deleteRoutine(Integer userNum, Integer routineId) {
+        userService.getUser(userNum);
+
+        ExerciseRoutineEntity routineEntity = routineRepository.findById(routineId)
+                .orElseThrow(RoutineNotFoundException::new);
+
+        if (!routineEntity.getUserNum().equals(userNum)) {
+            throw new RoutineNotMatchedException();
+        }
+
+        routineRepository.delete(routineEntity);
     }
 }

@@ -3,6 +3,7 @@ package com.health.service.api.routine.service;
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.health.service.api.DbUnitTestContext;
 import com.health.service.api.routine.exception.RoutineNotFoundException;
+import com.health.service.api.routine.exception.RoutineNotMatchedException;
 import com.health.service.api.routine.exception.RoutineRequestException;
 import com.health.service.api.routine.model.command.model.RoutineDto;
 import com.health.service.api.routine.model.command.request.CreateRoutineRequest;
@@ -120,6 +121,81 @@ public class RoutineServiceTest extends DbUnitTestContext {
         Integer routineId = 1;
         // when
         routineService.updateRoutine(userNum, routineId, request);
+        // then
+    }
+    
+    @Test
+    public void success_get_routine() {
+        // given
+        Integer userNum = 1;
+        Integer routineId = 1;
+        // when
+        RoutineDto routineDto = routineService.getRoutine(userNum, routineId);
+        // then
+        assertEquals(routineId, routineDto.getRoutineId());
+        assertEquals(userNum, routineDto.getUserNum());
+        assertEquals("test", routineDto.getRoutineName());
+        assertEquals(0, routineDto.getDayOfWeek());
+    }
+
+    @Test(expected = UserNotFoundException.class)
+    public void fail_get_routine_userNotFound() {
+        // given
+        Integer userNum = 1234;
+        Integer routineId = 1;
+        // when
+        routineService.getRoutine(userNum, routineId);
+        // then
+    }
+    
+    @Test(expected = RoutineNotFoundException.class)
+    public void fail_get_routine_routineNotFound() {
+        // given
+        Integer userNum = 1;
+        Integer routineId = 41;
+        // when
+        routineService.getRoutine(userNum, routineId);
+        // then
+    }
+
+    @Test(expected = RoutineNotFoundException.class)
+    public void success_delete_routine() {
+        // given
+        Integer userNum = 1;
+        Integer routineId = 1;
+        // when
+        routineService.deleteRoutine(userNum, routineId);
+        // then
+        routineService.getRoutine(userNum, routineId);
+    }
+
+    @Test(expected = UserNotFoundException.class)
+    public void fail_delete_routine_userNotFound() {
+        // given
+        Integer userNum = 41;
+        Integer routineId = 1;
+        // when
+        routineService.deleteRoutine(userNum, routineId);
+        // then
+    }
+    
+    @Test(expected = RoutineNotFoundException.class)
+    public void fail_delete_routine_routineNotFound() {
+        // given
+        Integer userNum = 1;
+        Integer routineId = 41;
+        // when
+        routineService.deleteRoutine(userNum, routineId);
+        // then
+    }
+
+    @Test(expected = RoutineNotMatchedException.class)
+    public void fail_delete_routine_routineNotMatched() {
+        // given
+        Integer userNum = 2;
+        Integer routineId = 1;
+        // when
+        routineService.deleteRoutine(userNum, routineId);
         // then
     }
 }
