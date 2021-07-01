@@ -10,5 +10,5 @@ public interface RoutineService {
 
     void updateRoutine(Integer userNum, Integer routineId, UpdateRoutineRequest request);
 
-    RoutineDto getRoutine(Integer routineId);
+    RoutineDto getRoutine(Integer userNum, Integer routineId);
 }

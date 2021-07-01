@@ -83,7 +83,7 @@ public class RoutineServiceTest extends DbUnitTestContext {
         Integer routineId = 1;
         // when
         routineService.updateRoutine(userNum, routineId, request);
-        RoutineDto routineDto = routineService.getRoutine(routineId);
+        RoutineDto routineDto = routineService.getRoutine(userNum, routineId);
         // then
         assertEquals("asdf", routineDto.getRoutineName());
         assertEquals(2, routineDto.getDayOfWeek());

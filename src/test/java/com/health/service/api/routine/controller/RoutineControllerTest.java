@@ -128,7 +128,32 @@ public class RoutineControllerTest extends DbUnitTestContext {
                 .content(objectToString(request)))
                 .andExpect(MockMvcResultMatchers.content().string("{\"header\":{\"statusCode\":400,\"message\":\"routine day of week value must set between 0, 6\",\"successful\":false},\"body\":null}"));
     }
-    
+
+    @Test
+    public void success_get_routine() throws Exception {
+        // given
+        Integer userNum = 1;
+        Integer routineId = 1;
+        // when
+        // then
+        mockMvc.perform(MockMvcRequestBuilders.get("/users/" + userNum + "/routines/" + routineId)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isOk());
+    }
+
+    @Test
+    public void fail_get_routine_notFoundRoutine() throws Exception {
+        // given
+        Integer userNum = 1;
+        Integer routineId = 1;
+        // when
+        doThrow(new RoutineNotFoundException()).when(routineService).getRoutine(any(), any());
+        // then
+        mockMvc.perform(MockMvcRequestBuilders.get("/users/" + userNum + "/routines/" + routineId)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.content().string("{\"header\":{\"statusCode\":404,\"message\":\"routine not found!\",\"successful\":false},\"body\":null}"));
+    }
+
     private static String objectToString(final Object obj) {
         try {
             return new ObjectMapper().writeValueAsString(obj);

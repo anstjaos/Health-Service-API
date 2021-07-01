@@ -3,6 +3,7 @@ package com.health.service.api.routine.controller;
 import com.health.service.api.common.model.APIResponse;
 import com.health.service.api.common.model.APIResponseHeader;
 import com.health.service.api.common.model.SingleResponse;
+import com.health.service.api.routine.model.command.model.RoutineDto;
 import com.health.service.api.routine.model.command.request.CreateRoutineRequest;
 import com.health.service.api.routine.model.command.request.UpdateRoutineRequest;
 import com.health.service.api.routine.service.RoutineService;
@@ -33,5 +34,12 @@ public class RoutineController {
                                      @RequestBody UpdateRoutineRequest request) {
         routineService.updateRoutine(userNum, routineId, request);
         return new APIResponse(APIResponseHeader.success(), new SingleResponse<>(null));
+    }
+
+    @GetMapping("/routines/{routineId}")
+    public APIResponse getRoutine(@PathVariable("userNum") Integer userNum,
+                                  @PathVariable("routineId") Integer routineId) {
+        RoutineDto routineDto = routineService.getRoutine(userNum, routineId);
+        return new APIResponse(APIResponseHeader.success(), new SingleResponse<>(routineDto));
     }
 }

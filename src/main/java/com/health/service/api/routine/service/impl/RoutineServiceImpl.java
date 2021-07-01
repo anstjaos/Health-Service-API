@@ -77,7 +77,9 @@ public class RoutineServiceImpl implements RoutineService {
     }
 
     @Override
-    public RoutineDto getRoutine(Integer routineId) {
+    public RoutineDto getRoutine(Integer userNum, Integer routineId) {
+        userService.getUser(userNum);
+        
         ExerciseRoutineEntity routineEntity = routineRepository.findById(routineId)
                 .orElseThrow(RoutineNotFoundException::new);
 
