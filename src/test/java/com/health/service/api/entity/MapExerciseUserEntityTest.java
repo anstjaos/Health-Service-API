@@ -2,6 +2,7 @@ package com.health.service.api.entity;
 
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.health.service.api.DbUnitTestContext;
+import com.health.service.api.exercise.entity.MapExerciseUserEntity;
 import org.junit.Test;
 
 import java.time.LocalDateTime;

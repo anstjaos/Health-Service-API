@@ -1,11 +1,10 @@
 package com.health.service.api.routine.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.health.service.api.DbUnitTestContext;
+import com.health.service.api.routine.exception.RoutineNotFoundException;
 import com.health.service.api.routine.exception.RoutineNotMatchedException;
 import com.health.service.api.routine.exception.RoutineRequestException;
-import com.health.service.api.routine.exception.RoutineNotFoundException;
 import com.health.service.api.routine.model.command.request.CreateRoutineRequest;
 import com.health.service.api.routine.model.command.request.UpdateRoutineRequest;
 import com.health.service.api.routine.service.RoutineService;
@@ -22,10 +21,10 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
+import static com.health.service.api.utility.ObjectToJsonUtil.objectToString;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doThrow;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -228,13 +227,5 @@ public class RoutineControllerTest extends DbUnitTestContext {
         mockMvc.perform(MockMvcRequestBuilders.get("/users/" + userNum + "/routines")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.content().string("{\"header\":{\"statusCode\":404,\"message\":\"not found user\",\"successful\":false},\"body\":null}"));
-    }
-
-    private static String objectToString(final Object obj) {
-        try {
-            return new ObjectMapper().writeValueAsString(obj);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
     }
 }

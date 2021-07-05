@@ -1,9 +1,7 @@
 package com.health.service.api.exercise.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.health.service.api.DbUnitTestContext;
-import com.health.service.api.config.WebConfig;
 import com.health.service.api.config.interceptor.JwtAuthInterceptor;
 import com.health.service.api.exercise.exception.ExerciseNotFoundException;
 import com.health.service.api.exercise.model.command.model.ExerciseDto;
@@ -12,19 +10,18 @@ import com.health.service.api.exercise.model.command.request.ExerciseUpdateReque
 import com.health.service.api.exercise.service.ExerciseService;
 import org.junit.Test;
 import org.junit.jupiter.api.BeforeEach;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
+import static com.health.service.api.utility.ObjectToJsonUtil.objectToString;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
 @AutoConfigureMockMvc
@@ -32,7 +29,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
         "/database/exercise.xml",
         "/database/service_user.xml"
 })
-public  class ExerciseControllerTest extends DbUnitTestContext {
+public class ExerciseControllerTest extends DbUnitTestContext {
 
     @Autowired
     private MockMvc mockMvc;
@@ -146,13 +143,5 @@ public  class ExerciseControllerTest extends DbUnitTestContext {
         mockMvc.perform(MockMvcRequestBuilders.delete("/exercises/1"))
                 .andDo(print())
                 .andExpect(MockMvcResultMatchers.status().isOk());
-    }
-
-    private static String objectToString(final Object obj) {
-        try {
-            return new ObjectMapper().writeValueAsString(obj);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
     }
 }

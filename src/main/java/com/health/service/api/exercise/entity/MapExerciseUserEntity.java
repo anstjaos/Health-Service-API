@@ -1,4 +1,4 @@
-package com.health.service.api.entity;
+package com.health.service.api.exercise.entity;
 
 import lombok.Getter;
 import lombok.Setter;
