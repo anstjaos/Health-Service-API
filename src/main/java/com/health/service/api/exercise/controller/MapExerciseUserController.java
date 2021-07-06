@@ -3,13 +3,10 @@ package com.health.service.api.exercise.controller;
 import com.health.service.api.common.model.APIResponse;
 import com.health.service.api.common.model.APIResponseHeader;
 import com.health.service.api.common.model.SingleResponse;
-import com.health.service.api.exercise.model.command.request.ExerciseUserCreateRequest;
+import com.health.service.api.exercise.model.command.request.ExerciseUserCreateAndUpdateRequest;
 import com.health.service.api.exercise.service.MapExerciseUserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/users/{userNum}/exercises")
@@ -25,8 +22,17 @@ public class MapExerciseUserController {
     @PostMapping("/{exerciseId}")
     public APIResponse createMapUserExercise(@PathVariable("userNum") Integer userNum,
                                              @PathVariable("exerciseId") Integer exerciseId,
-                                             ExerciseUserCreateRequest request) {
-        mapExerciseUserService.createMapUserExercise(userNum, exerciseId, request);
+                                             ExerciseUserCreateAndUpdateRequest request) {
+        mapExerciseUserService.createMapExerciseUser(userNum, exerciseId, request);
+        return new APIResponse(APIResponseHeader.success(), new SingleResponse<>(null));
+    }
+
+    @PutMapping("/{exerciseId}/maps/{mapId}")
+    public APIResponse updateMapUserExercise(@PathVariable("userNum") Integer userNum,
+                                             @PathVariable("exerciseId") Integer exerciseId,
+                                             @PathVariable("mapId") Integer mapId,
+                                             ExerciseUserCreateAndUpdateRequest request) {
+        mapExerciseUserService.updateMapExerciseUser(userNum, exerciseId, mapId, request);
         return new APIResponse(APIResponseHeader.success(), new SingleResponse<>(null));
     }
 }

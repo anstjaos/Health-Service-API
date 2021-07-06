@@ -3,8 +3,9 @@ package com.health.service.api.exercise.controller;
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.health.service.api.DbUnitTestContext;
 import com.health.service.api.exercise.exception.ExerciseNotFoundException;
-import com.health.service.api.exercise.exception.ExerciseUserCreateValidationException;
-import com.health.service.api.exercise.model.command.request.ExerciseUserCreateRequest;
+import com.health.service.api.exercise.exception.ExerciseUserValidationException;
+import com.health.service.api.exercise.exception.MapExerciseUserNotFoundException;
+import com.health.service.api.exercise.model.command.request.ExerciseUserCreateAndUpdateRequest;
 import com.health.service.api.exercise.service.MapExerciseUserService;
 import com.health.service.api.user.exception.UserNotFoundException;
 import org.junit.Test;
@@ -45,7 +46,7 @@ public class MapExerciseUserControllerTest extends DbUnitTestContext {
     @Test
     public void success_create_user_exercise() throws Exception {
         // given
-        ExerciseUserCreateRequest request = new ExerciseUserCreateRequest();
+        ExerciseUserCreateAndUpdateRequest request = new ExerciseUserCreateAndUpdateRequest();
         request.setDate(LocalDateTime.now());
         request.setExerciseCount(10);
         request.setSetCount(3);
@@ -60,12 +61,12 @@ public class MapExerciseUserControllerTest extends DbUnitTestContext {
     @Test
     public void fail_create_exercise_user_userNotFound() throws Exception {
         // given
-        ExerciseUserCreateRequest request = new ExerciseUserCreateRequest();
+        ExerciseUserCreateAndUpdateRequest request = new ExerciseUserCreateAndUpdateRequest();
         request.setDate(LocalDateTime.now());
         request.setExerciseCount(10);
         request.setSetCount(3);
         // when
-        doThrow(new UserNotFoundException()).when(mapExerciseUserService).createMapUserExercise(any(), any(), any());
+        doThrow(new UserNotFoundException()).when(mapExerciseUserService).createMapExerciseUser(any(), any(), any());
         // then
         mockMvc.perform(MockMvcRequestBuilders.post("/users/1/exercises/1")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -76,12 +77,12 @@ public class MapExerciseUserControllerTest extends DbUnitTestContext {
     @Test
     public void fail_create_exercise_user_exerciseNotFound() throws Exception {
         // given
-        ExerciseUserCreateRequest request = new ExerciseUserCreateRequest();
+        ExerciseUserCreateAndUpdateRequest request = new ExerciseUserCreateAndUpdateRequest();
         request.setDate(LocalDateTime.now());
         request.setExerciseCount(10);
         request.setSetCount(3);
         // when
-        doThrow(new ExerciseNotFoundException()).when(mapExerciseUserService).createMapUserExercise(any(), any(), any());
+        doThrow(new ExerciseNotFoundException()).when(mapExerciseUserService).createMapExerciseUser(any(), any(), any());
         // then
         mockMvc.perform(MockMvcRequestBuilders.post("/users/1/exercises/1")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -92,16 +93,107 @@ public class MapExerciseUserControllerTest extends DbUnitTestContext {
     @Test
     public void fail_create_exercise_user_validationFail() throws Exception {
         // given
-        ExerciseUserCreateRequest request = new ExerciseUserCreateRequest();
+        ExerciseUserCreateAndUpdateRequest request = new ExerciseUserCreateAndUpdateRequest();
         request.setDate(LocalDateTime.now());
         request.setExerciseCount(10);
         request.setSetCount(3);
         // when
-        doThrow(new ExerciseUserCreateValidationException()).when(mapExerciseUserService).createMapUserExercise(any(), any(), any());
+        doThrow(new ExerciseUserValidationException()).when(mapExerciseUserService).createMapExerciseUser(any(), any(), any());
         // then
         mockMvc.perform(MockMvcRequestBuilders.post("/users/1/exercises/1")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectToString(request)))
-                .andExpect(MockMvcResultMatchers.content().string("{\"header\":{\"statusCode\":400,\"message\":\"create user exercise request validation fault\",\"successful\":false},\"body\":null}"));
+                .andExpect(MockMvcResultMatchers.content().string("{\"header\":{\"statusCode\":400,\"message\":\"user exercise request validation fault\",\"successful\":false},\"body\":null}"));
+    }
+
+    @Test
+    public void success_update_exercise_user() throws Exception {
+        // given
+        ExerciseUserCreateAndUpdateRequest request = new ExerciseUserCreateAndUpdateRequest();
+        request.setDate(LocalDateTime.now());
+        request.setExerciseCount(10);
+        request.setSetCount(4);
+        // when
+        // then
+        mockMvc.perform(MockMvcRequestBuilders.put("/users/1/exercises/1/maps/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectToString(request)))
+                .andExpect(MockMvcResultMatchers.status().isOk());
+    }
+
+    @Test
+    public void fail_update_exercise_user_notFoundUser() throws Exception {
+        // given
+        ExerciseUserCreateAndUpdateRequest request = new ExerciseUserCreateAndUpdateRequest();
+        request.setDate(LocalDateTime.now());
+        request.setExerciseCount(10);
+        request.setSetCount(3);
+
+        Integer userNum = 1234;
+        Integer exerciseId = 1;
+        // when
+        doThrow(new UserNotFoundException()).when(mapExerciseUserService).updateMapExerciseUser(any(), any(), any(), any());
+        // then
+        mockMvc.perform(MockMvcRequestBuilders.put("/users/" + userNum + "/exercises/" + exerciseId + "/maps/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectToString(request)))
+                .andExpect(MockMvcResultMatchers.content().string("{\"header\":{\"statusCode\":404,\"message\":\"not found user\",\"successful\":false},\"body\":null}"));
+    }
+
+    @Test
+    public void fail_update_exercise_user_exerciseNotFound() throws Exception {
+        // given
+        ExerciseUserCreateAndUpdateRequest request = new ExerciseUserCreateAndUpdateRequest();
+        request.setDate(LocalDateTime.now());
+        request.setExerciseCount(10);
+        request.setSetCount(3);
+
+        Integer userNum = 1;
+        Integer exerciseId = 1231;
+        // when
+        doThrow(new ExerciseNotFoundException()).when(mapExerciseUserService).updateMapExerciseUser(any(), any(), any(), any());
+        // then
+        mockMvc.perform(MockMvcRequestBuilders.put("/users/" + userNum + "/exercises/" + exerciseId + "/maps/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectToString(request)))
+                .andExpect(MockMvcResultMatchers.content().string("{\"header\":{\"statusCode\":404,\"message\":\"not found exercise\",\"successful\":false},\"body\":null}"));
+    }
+
+    @Test
+    public void fail_update_exercise_user_validation() throws Exception {
+        // given
+        ExerciseUserCreateAndUpdateRequest request = new ExerciseUserCreateAndUpdateRequest();
+        request.setDate(LocalDateTime.now());
+        request.setExerciseCount(-1);
+        request.setSetCount(3);
+
+        Integer userNum = 1;
+        Integer exerciseId = 1;
+        // when
+        doThrow(new ExerciseUserValidationException()).when(mapExerciseUserService).updateMapExerciseUser(any(), any(), any(), any());
+        // then
+        mockMvc.perform(MockMvcRequestBuilders.put("/users/" + userNum + "/exercises/" + exerciseId + "/maps/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectToString(request)))
+                .andExpect(MockMvcResultMatchers.content().string("{\"header\":{\"statusCode\":400,\"message\":\"user exercise request validation fault\",\"successful\":false},\"body\":null}"));
+    }
+
+    @Test
+    public void fail_update_exercise_user_mapIdNotFound() throws Exception {
+        // given
+        ExerciseUserCreateAndUpdateRequest request = new ExerciseUserCreateAndUpdateRequest();
+        request.setDate(LocalDateTime.now());
+        request.setExerciseCount(10);
+        request.setSetCount(3);
+
+        Integer userNum = 1;
+        Integer exerciseId = 1;
+        // when
+        doThrow(new MapExerciseUserNotFoundException()).when(mapExerciseUserService).updateMapExerciseUser(any(), any(), any(), any());
+        // then
+        mockMvc.perform(MockMvcRequestBuilders.put("/users/" + userNum + "/exercises/" + exerciseId + "/maps/123")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectToString(request)))
+                .andExpect(MockMvcResultMatchers.content().string("{\"header\":{\"statusCode\":404,\"message\":\"map id is not found\",\"successful\":false},\"body\":null}"));
     }
 }

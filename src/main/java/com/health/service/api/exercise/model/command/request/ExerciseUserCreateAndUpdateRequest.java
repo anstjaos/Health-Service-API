@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @Setter
-public class ExerciseUserCreateRequest {
+public class ExerciseUserCreateAndUpdateRequest {
 
     private LocalDateTime date;
 
