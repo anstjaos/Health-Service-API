@@ -4,8 +4,8 @@ create table if not exists Service_User
     user_id         varchar(45),
     nickname        varchar(25),
     password        varchar(256),
-    created_on      datetime,
-    modified_on     datetime,
+    created_on      timestamp,
+    modified_on     timestamp,
     email           varchar(40),
     token           varchar(256)
 );
@@ -50,7 +50,7 @@ create table if not exists Map_Exercise_User
     map_id              int auto_increment primary key,
     exercise_id         int,
     user_num            int,
-    date                date,
+    date                timestamp,
     exercise_count      int,
     set_count           int
 );

@@ -1,6 +1,5 @@
 package com.health.service.api.user.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.health.service.api.DbUnitTestContext;
 import com.health.service.api.user.exception.UserLoginFailException;
@@ -21,6 +20,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
+import static com.health.service.api.utility.ObjectToJsonUtil.objectToString;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -137,13 +137,5 @@ public class UserControllerTest extends DbUnitTestContext {
                 .content(objectToString(request)))
                 .andDo(print())
                 .andExpect(MockMvcResultMatchers.content().string("{\"header\":{\"statusCode\":403,\"message\":\"login info is not valid\",\"successful\":false},\"body\":null}"));
-    }
-
-    private static String objectToString(final Object obj) {
-        try {
-            return new ObjectMapper().writeValueAsString(obj);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
     }
 }
