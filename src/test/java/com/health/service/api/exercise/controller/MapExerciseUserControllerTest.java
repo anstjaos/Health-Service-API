@@ -8,7 +8,9 @@ import com.health.service.api.exercise.exception.MapExerciseUserNotFoundExceptio
 import com.health.service.api.exercise.model.command.request.ExerciseUserCreateAndUpdateRequest;
 import com.health.service.api.exercise.service.MapExerciseUserService;
 import com.health.service.api.user.exception.UserNotFoundException;
+import org.junit.Before;
 import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -42,6 +44,17 @@ public class MapExerciseUserControllerTest extends DbUnitTestContext {
     @Autowired
     @MockBean
     private MapExerciseUserService mapExerciseUserService;
+
+    private Integer userNum;
+    private Integer exerciseId;
+    private Integer mapId;
+
+    @Before
+    public void setUp() {
+        this.userNum = 1;
+        this.exerciseId = 1;
+        this.mapId = 1;
+    }
 
     @Test
     public void success_create_user_exercise() throws Exception {
@@ -129,8 +142,7 @@ public class MapExerciseUserControllerTest extends DbUnitTestContext {
         request.setExerciseCount(10);
         request.setSetCount(3);
 
-        Integer userNum = 1234;
-        Integer exerciseId = 1;
+        userNum = 1234;
         // when
         doThrow(new UserNotFoundException()).when(mapExerciseUserService).updateMapExerciseUser(any(), any(), any(), any());
         // then
@@ -148,8 +160,7 @@ public class MapExerciseUserControllerTest extends DbUnitTestContext {
         request.setExerciseCount(10);
         request.setSetCount(3);
 
-        Integer userNum = 1;
-        Integer exerciseId = 1231;
+        exerciseId = 1231;
         // when
         doThrow(new ExerciseNotFoundException()).when(mapExerciseUserService).updateMapExerciseUser(any(), any(), any(), any());
         // then
@@ -166,9 +177,6 @@ public class MapExerciseUserControllerTest extends DbUnitTestContext {
         request.setDate(LocalDateTime.now());
         request.setExerciseCount(-1);
         request.setSetCount(3);
-
-        Integer userNum = 1;
-        Integer exerciseId = 1;
         // when
         doThrow(new ExerciseUserValidationException()).when(mapExerciseUserService).updateMapExerciseUser(any(), any(), any(), any());
         // then
@@ -185,9 +193,6 @@ public class MapExerciseUserControllerTest extends DbUnitTestContext {
         request.setDate(LocalDateTime.now());
         request.setExerciseCount(10);
         request.setSetCount(3);
-
-        Integer userNum = 1;
-        Integer exerciseId = 1;
         // when
         doThrow(new MapExerciseUserNotFoundException()).when(mapExerciseUserService).updateMapExerciseUser(any(), any(), any(), any());
         // then
@@ -200,9 +205,6 @@ public class MapExerciseUserControllerTest extends DbUnitTestContext {
     @Test
     public void success_get_exercise_user() throws Exception {
         // given
-        Integer userNum = 1;
-        Integer exerciseId = 1;
-        Integer mapId = 1;
         // when
         // then
         mockMvc.perform(MockMvcRequestBuilders.get("/users/" + userNum + "/exercises/" + exerciseId + "/maps/" + mapId))
@@ -212,9 +214,7 @@ public class MapExerciseUserControllerTest extends DbUnitTestContext {
     @Test
     public void fail_get_exercise_user_userNotFound() throws Exception {
         // given
-        Integer userNum = 1234;
-        Integer exerciseId = 1;
-        Integer mapId = 1;
+        userNum = 1234;
         // when
         doThrow(new UserNotFoundException()).when(mapExerciseUserService).getMapExerciseUser(any(), any(), any());
         // then
@@ -225,9 +225,7 @@ public class MapExerciseUserControllerTest extends DbUnitTestContext {
     @Test
     public void fail_get_exercise_user_exerciseNotFound() throws Exception {
         // given
-        Integer userNum = 1;
-        Integer exerciseId = 1234;
-        Integer mapId = 1;
+        exerciseId = 1234;
         // when
         doThrow(new ExerciseNotFoundException()).when(mapExerciseUserService).getMapExerciseUser(any(), any(), any());
         // then
@@ -238,13 +236,31 @@ public class MapExerciseUserControllerTest extends DbUnitTestContext {
     @Test
     public void fail_get_exercise_user_mapIdNotFound() throws Exception {
         // given
-        Integer userNum = 1;
-        Integer exerciseId = 1;
-        Integer mapId = 1234;
+        mapId = 1234;
         // when
         doThrow(new MapExerciseUserNotFoundException()).when(mapExerciseUserService).getMapExerciseUser(any(), any(), any());
         // then
         mockMvc.perform(MockMvcRequestBuilders.get("/users/" + userNum + "/exercises/" + exerciseId + "/maps/" + mapId))
                 .andExpect(MockMvcResultMatchers.content().string("{\"header\":{\"statusCode\":404,\"message\":\"map id is not found\",\"successful\":false},\"body\":null}"));
+    }
+
+    @Test
+    public void success_get_exercise_users() throws Exception {
+        // given
+        // when
+        // then
+        mockMvc.perform(MockMvcRequestBuilders.get("/users/" + userNum + "/exercises"))
+                .andExpect(MockMvcResultMatchers.status().isOk());
+    }
+
+    @Test
+    public void fail_get_exercise_users_userNotFound() throws Exception {
+        // given
+        userNum = 1234;
+        // when
+        doThrow(new UserNotFoundException()).when(mapExerciseUserService).getMapExerciseUserList(any());
+        // then
+        mockMvc.perform(MockMvcRequestBuilders.get("/users/" + userNum + "/exercises"))
+                .andExpect(MockMvcResultMatchers.content().string("{\"header\":{\"statusCode\":404,\"message\":\"not found user\",\"successful\":false},\"body\":null}"));
     }
 }

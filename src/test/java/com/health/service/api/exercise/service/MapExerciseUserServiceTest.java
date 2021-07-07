@@ -13,6 +13,7 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -230,6 +231,24 @@ public class MapExerciseUserServiceTest extends DbUnitTestContext {
         mapId = 1234;
         // when
         mapExerciseUserService.getMapExerciseUser(userNum, exerciseId, mapId);
+        // then
+    }
+
+    @Test
+    public void success_get_exercise_user_list() {
+        // given
+        // when
+        List<MapExerciseUserDto> mapExerciseUserDtoList = mapExerciseUserService.getMapExerciseUserList(userNum);
+        // then
+        assertEquals(2, mapExerciseUserDtoList.size());
+    }
+
+    @Test(expected = UserNotFoundException.class)
+    public void fail_get_exercise_user_list_userNotFound() {
+        // given
+        userNum = 1234;
+        // when
+        mapExerciseUserService.getMapExerciseUserList(userNum);
         // then
     }
 }

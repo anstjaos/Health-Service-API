@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -73,6 +74,19 @@ public class MapExerciseUserServiceImpl implements MapExerciseUserService {
                 .ifPresent(mapExerciseUserEntity::setSetCount);
     }
 
+    private void requestValidation(ExerciseUserCreateAndUpdateRequest request) {
+        Optional.ofNullable(request.getExerciseCount())
+                .ifPresent(exerciseCount -> {
+                    if (exerciseCount < 0) throw new ExerciseUserValidationException();
+                });
+
+        Optional.ofNullable(request.getSetCount())
+                .ifPresent(setCount -> {
+                    if (setCount < 0) throw new ExerciseUserValidationException();
+                });
+    }
+
+
     @Override
     public MapExerciseUserDto getMapExerciseUser(Integer userNum, Integer exerciseId, Integer mapId) {
         userService.getUser(userNum);
@@ -84,15 +98,12 @@ public class MapExerciseUserServiceImpl implements MapExerciseUserService {
         return MapExerciseUserDtoMapper.convert(mapExerciseUserEntity);
     }
 
-    private void requestValidation(ExerciseUserCreateAndUpdateRequest request) {
-        Optional.ofNullable(request.getExerciseCount())
-                .ifPresent(exerciseCount -> {
-                    if (exerciseCount < 0) throw new ExerciseUserValidationException();
-                });
+    @Override
+    public List<MapExerciseUserDto> getMapExerciseUserList(Integer userNum) {
+        userService.getUser(userNum);
 
-        Optional.ofNullable(request.getSetCount())
-                .ifPresent(setCount -> {
-                    if (setCount < 0) throw new ExerciseUserValidationException();
-                });
+        List<MapExerciseUserEntity> mapExerciseUserEntityList = mapExerciseUserRepository.findAllByUserNum(userNum);
+
+        return MapExerciseUserDtoMapper.convert(mapExerciseUserEntityList);
     }
 }
