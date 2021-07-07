@@ -3,6 +3,8 @@ package com.health.service.api.exercise.service.impl;
 import com.health.service.api.exercise.entity.MapExerciseUserEntity;
 import com.health.service.api.exercise.exception.ExerciseUserValidationException;
 import com.health.service.api.exercise.exception.MapExerciseUserNotFoundException;
+import com.health.service.api.exercise.model.command.model.MapExerciseUserDto;
+import com.health.service.api.exercise.model.command.model.mapper.MapExerciseUserDtoMapper;
 import com.health.service.api.exercise.model.command.request.ExerciseUserCreateAndUpdateRequest;
 import com.health.service.api.exercise.repository.MapExerciseUserRepository;
 import com.health.service.api.exercise.service.ExerciseService;
@@ -69,6 +71,17 @@ public class MapExerciseUserServiceImpl implements MapExerciseUserService {
 
         Optional.ofNullable(request.getSetCount())
                 .ifPresent(mapExerciseUserEntity::setSetCount);
+    }
+
+    @Override
+    public MapExerciseUserDto getMapExerciseUser(Integer userNum, Integer exerciseId, Integer mapId) {
+        userService.getUser(userNum);
+        exerciseService.getExercise(exerciseId);
+
+        MapExerciseUserEntity mapExerciseUserEntity = mapExerciseUserRepository.findById(mapId)
+                .orElseThrow(MapExerciseUserNotFoundException::new);
+
+        return MapExerciseUserDtoMapper.convert(mapExerciseUserEntity);
     }
 
     private void requestValidation(ExerciseUserCreateAndUpdateRequest request) {

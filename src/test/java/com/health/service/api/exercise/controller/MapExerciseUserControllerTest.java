@@ -196,4 +196,55 @@ public class MapExerciseUserControllerTest extends DbUnitTestContext {
                 .content(objectToString(request)))
                 .andExpect(MockMvcResultMatchers.content().string("{\"header\":{\"statusCode\":404,\"message\":\"map id is not found\",\"successful\":false},\"body\":null}"));
     }
+
+    @Test
+    public void success_get_exercise_user() throws Exception {
+        // given
+        Integer userNum = 1;
+        Integer exerciseId = 1;
+        Integer mapId = 1;
+        // when
+        // then
+        mockMvc.perform(MockMvcRequestBuilders.get("/users/" + userNum + "/exercises/" + exerciseId + "/maps/" + mapId))
+                .andExpect(MockMvcResultMatchers.status().isOk());
+    }
+
+    @Test
+    public void fail_get_exercise_user_userNotFound() throws Exception {
+        // given
+        Integer userNum = 1234;
+        Integer exerciseId = 1;
+        Integer mapId = 1;
+        // when
+        doThrow(new UserNotFoundException()).when(mapExerciseUserService).getMapExerciseUser(any(), any(), any());
+        // then
+        mockMvc.perform(MockMvcRequestBuilders.get("/users/" + userNum + "/exercises/" + exerciseId + "/maps/" + mapId))
+                .andExpect(MockMvcResultMatchers.content().string("{\"header\":{\"statusCode\":404,\"message\":\"not found user\",\"successful\":false},\"body\":null}"));
+    }
+
+    @Test
+    public void fail_get_exercise_user_exerciseNotFound() throws Exception {
+        // given
+        Integer userNum = 1;
+        Integer exerciseId = 1234;
+        Integer mapId = 1;
+        // when
+        doThrow(new ExerciseNotFoundException()).when(mapExerciseUserService).getMapExerciseUser(any(), any(), any());
+        // then
+        mockMvc.perform(MockMvcRequestBuilders.get("/users/" + userNum + "/exercises/" + exerciseId + "/maps/" + mapId))
+                .andExpect(MockMvcResultMatchers.content().string("{\"header\":{\"statusCode\":404,\"message\":\"not found exercise\",\"successful\":false},\"body\":null}"));
+    }
+
+    @Test
+    public void fail_get_exercise_user_mapIdNotFound() throws Exception {
+        // given
+        Integer userNum = 1;
+        Integer exerciseId = 1;
+        Integer mapId = 1234;
+        // when
+        doThrow(new MapExerciseUserNotFoundException()).when(mapExerciseUserService).getMapExerciseUser(any(), any(), any());
+        // then
+        mockMvc.perform(MockMvcRequestBuilders.get("/users/" + userNum + "/exercises/" + exerciseId + "/maps/" + mapId))
+                .andExpect(MockMvcResultMatchers.content().string("{\"header\":{\"statusCode\":404,\"message\":\"map id is not found\",\"successful\":false},\"body\":null}"));
+    }
 }
