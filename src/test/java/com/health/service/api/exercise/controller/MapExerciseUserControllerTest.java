@@ -10,7 +10,6 @@ import com.health.service.api.exercise.service.MapExerciseUserService;
 import com.health.service.api.user.exception.UserNotFoundException;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -262,5 +261,36 @@ public class MapExerciseUserControllerTest extends DbUnitTestContext {
         // then
         mockMvc.perform(MockMvcRequestBuilders.get("/users/" + userNum + "/exercises"))
                 .andExpect(MockMvcResultMatchers.content().string("{\"header\":{\"statusCode\":404,\"message\":\"not found user\",\"successful\":false},\"body\":null}"));
+    }
+
+    @Test
+    public void success_delete_exercise_user() throws Exception {
+        // given
+        // when
+        // then
+        mockMvc.perform(MockMvcRequestBuilders.delete("/users/" + userNum + "/exercises/" + exerciseId + "/maps/" + mapId))
+                .andExpect(MockMvcResultMatchers.status().isOk());
+    }
+
+    @Test
+    public void fail_delete_exercise_user_userNotFound() throws Exception {
+        // given
+        userNum = 1234;
+        // when
+        doThrow(new UserNotFoundException()).when(mapExerciseUserService).deleteMapExerciseUser(any(), any(), any());
+        // then
+        mockMvc.perform(MockMvcRequestBuilders.delete("/users/" + userNum + "/exercises/" + exerciseId + "/maps/" + mapId))
+                .andExpect(MockMvcResultMatchers.content().string("{\"header\":{\"statusCode\":404,\"message\":\"not found user\",\"successful\":false},\"body\":null}"));
+    }
+
+    @Test
+    public void fail_delete_exercise_user_exerciseNotFound() throws Exception {
+        // given
+        exerciseId = 1234;
+        // when
+        doThrow(new ExerciseNotFoundException()).when(mapExerciseUserService).deleteMapExerciseUser(any(), any(), any());
+        // then
+        mockMvc.perform(MockMvcRequestBuilders.delete("/users/" + userNum + "/exercises/" + exerciseId + "/maps/" + mapId))
+                .andExpect(MockMvcResultMatchers.content().string("{\"header\":{\"statusCode\":404,\"message\":\"not found exercise\",\"successful\":false},\"body\":null}"));
     }
 }

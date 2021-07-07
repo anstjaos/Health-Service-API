@@ -35,7 +35,7 @@ public class MapExerciseUserServiceImpl implements MapExerciseUserService {
 
     @Override
     @Transactional
-    public void createMapExerciseUser(Integer userNum, Integer exerciseId, ExerciseUserCreateAndUpdateRequest request) {
+    public Integer createMapExerciseUser(Integer userNum, Integer exerciseId, ExerciseUserCreateAndUpdateRequest request) {
         // exist validation
         userService.getUser(userNum);
         exerciseService.getExercise(exerciseId);
@@ -49,7 +49,8 @@ public class MapExerciseUserServiceImpl implements MapExerciseUserService {
         mapExerciseUserEntity.setExerciseCount(request.getExerciseCount());
         mapExerciseUserEntity.setSetCount(request.getSetCount());
 
-        mapExerciseUserRepository.save(mapExerciseUserEntity);
+        mapExerciseUserEntity = mapExerciseUserRepository.save(mapExerciseUserEntity);
+        return mapExerciseUserEntity.getMapId();
     }
 
     @Override
@@ -105,5 +106,14 @@ public class MapExerciseUserServiceImpl implements MapExerciseUserService {
         List<MapExerciseUserEntity> mapExerciseUserEntityList = mapExerciseUserRepository.findAllByUserNum(userNum);
 
         return MapExerciseUserDtoMapper.convert(mapExerciseUserEntityList);
+    }
+
+    @Override
+    @Transactional
+    public void deleteMapExerciseUser(Integer userNum, Integer exerciseId, Integer mapId) {
+        userService.getUser(userNum);
+        exerciseService.getExercise(exerciseId);
+
+        mapExerciseUserRepository.deleteById(mapId);
     }
 }

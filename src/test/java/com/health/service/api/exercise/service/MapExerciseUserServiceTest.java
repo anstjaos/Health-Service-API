@@ -47,12 +47,14 @@ public class MapExerciseUserServiceTest extends DbUnitTestContext {
         request.setExerciseCount(15);
         request.setSetCount(5);
         // when
-        mapExerciseUserService.createMapExerciseUser(userNum, exerciseId, request);
+        Integer mapId = mapExerciseUserService.createMapExerciseUser(userNum, exerciseId, request);
         // then
-        MapExerciseUserDto dto = mapExerciseUserService.getMapExerciseUser(userNum, exerciseId, 3);
+        MapExerciseUserDto dto = mapExerciseUserService.getMapExerciseUser(userNum, exerciseId, mapId);
         assertEquals(now, dto.getDate());
         assertEquals(15, dto.getExerciseCount());
         assertEquals(5, dto.getSetCount());
+
+        mapExerciseUserService.deleteMapExerciseUser(userNum, exerciseId, mapId);
     }
 
     @Test(expected = UserNotFoundException.class)
@@ -249,6 +251,37 @@ public class MapExerciseUserServiceTest extends DbUnitTestContext {
         userNum = 1234;
         // when
         mapExerciseUserService.getMapExerciseUserList(userNum);
+        // then
+    }
+
+    @Test
+    public void success_delete_exercise_user() {
+        // given
+        ExerciseUserCreateAndUpdateRequest request = new ExerciseUserCreateAndUpdateRequest();
+        request.setDate(LocalDateTime.now());
+        request.setExerciseCount(10);
+        request.setSetCount(3);
+        Integer mapId = mapExerciseUserService.createMapExerciseUser(userNum, exerciseId, request);
+        // when
+        mapExerciseUserService.deleteMapExerciseUser(userNum, exerciseId, mapId);
+        // then
+    }
+
+    @Test(expected = UserNotFoundException.class)
+    public void fail_delete_exercise_user_userNotFound() {
+        // given
+        userNum = 1234;
+        // when
+        mapExerciseUserService.deleteMapExerciseUser(userNum, exerciseId, mapId);
+        // then
+    }
+
+    @Test(expected = ExerciseNotFoundException.class)
+    public void fail_delete_exercise_user_exerciseNotFound() {
+        // given
+        exerciseId = 1234;
+        // when
+        mapExerciseUserService.deleteMapExerciseUser(userNum, exerciseId, mapId);
         // then
     }
 }

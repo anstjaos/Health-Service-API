@@ -27,8 +27,8 @@ public class MapExerciseUserController {
     public APIResponse createMapExerciseUser(@PathVariable("userNum") Integer userNum,
                                              @PathVariable("exerciseId") Integer exerciseId,
                                              ExerciseUserCreateAndUpdateRequest request) {
-        mapExerciseUserService.createMapExerciseUser(userNum, exerciseId, request);
-        return new APIResponse(APIResponseHeader.success(), new SingleResponse<>(null));
+        Integer mapId = mapExerciseUserService.createMapExerciseUser(userNum, exerciseId, request);
+        return new APIResponse(APIResponseHeader.success(), new SingleResponse<>(mapId));
     }
 
     @PutMapping("/{exerciseId}/maps/{mapId}")
@@ -52,5 +52,13 @@ public class MapExerciseUserController {
     public APIResponse getMapExerciseUserList(@PathVariable("userNum") Integer userNum) {
         List<MapExerciseUserDto> mapExerciseUserDtoList = mapExerciseUserService.getMapExerciseUserList(userNum);
         return new APIResponse(APIResponseHeader.success(), new CollectionResponse<>(mapExerciseUserDtoList.size(), mapExerciseUserDtoList));
+    }
+
+    @DeleteMapping("/{exerciseId}/maps/{mapId}")
+    public APIResponse deleteMapExerciseUser(@PathVariable("userNum") Integer userNum,
+                                             @PathVariable("exerciseId") Integer exerciseId,
+                                             @PathVariable("mapId") Integer mapId) {
+        mapExerciseUserService.deleteMapExerciseUser(userNum, exerciseId, mapId);
+        return new APIResponse(APIResponseHeader.success(), new SingleResponse<>(null));
     }
 }

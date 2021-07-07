@@ -7,11 +7,13 @@ import java.util.List;
 
 public interface MapExerciseUserService {
 
-    void createMapExerciseUser(Integer userNum, Integer exerciseId, ExerciseUserCreateAndUpdateRequest request);
+    Integer createMapExerciseUser(Integer userNum, Integer exerciseId, ExerciseUserCreateAndUpdateRequest request);
 
     void updateMapExerciseUser(Integer userNum, Integer exerciseId, Integer mapId, ExerciseUserCreateAndUpdateRequest request);
 
     MapExerciseUserDto getMapExerciseUser(Integer userNum, Integer exerciseId, Integer mapId);
 
     List<MapExerciseUserDto> getMapExerciseUserList(Integer userNum);
+
+    void deleteMapExerciseUser(Integer userNum, Integer exerciseId, Integer mapId);
 }
