@@ -37,7 +37,7 @@ POST /users
 {
   "userId": "test@naver.com",
   "nickname": "test",
-  "password": "asdf...", // encoded SHA-256
+  "password": "asdf...", # encoded SHA-256
   "email": "test@naver.com"
 }
 ```
@@ -133,7 +133,7 @@ POST /auth/login
 ```json
 {
 	"userId": "test@naver.com",
-	"password": "asdfasdf" // encoded SHA-256
+	"password": "asdfasdf" # encoded SHA-256
 }
 ```
 
@@ -324,7 +324,7 @@ POST /users/{userNum}/exercises/{exerciseId}
 * 수행한 운동 수정
 
 ```http
-PUT /users/{userNum}/exercises/{exercisesId}
+PUT /users/{userNum}/exercises/{exercisesId}/maps/{mapId}
 ```
 
 
@@ -355,7 +355,7 @@ PUT /users/{userNum}/exercises/{exercisesId}
 * 수행한 운동 조회
 
 ```http
-GET /users/{userNum}/exercises/{exercisesId}
+GET /users/{userNum}/exercises/{exercisesId}/maps/{mapId}
 ```
 
 
@@ -416,7 +416,7 @@ GET /users/{userNum}/exercises
 * 수행한 운동 삭제
 
 ```http
-DELETE /users/{userNum}/exercises/{exerciseId}
+DELETE /users/{userNum}/exercises/{exerciseId}/maps/{mapId}
 ```
 
 
